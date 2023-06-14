@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+  <meta charset="UTF-8">
+  <title>Traductor de audio a texto</title>
+</head>
+<body>
+  <h1>Traductor de audio a texto</h1>
+
+  <button id="start-btn">Iniciar traducción</button>
+  <div id="result"></div>
+
+  <script>
+    // Verificar si el navegador admite la API de reconocimiento de voz
+    if ('webkitSpeechRecognition' in window) {
+      var recognition = new webkitSpeechRecognition();
+
+      // Configuraciones del reconocimiento de voz
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.lang = 'es-ES'; // Configura el idioma
+
+      // Evento para manejar los resultados del reconocimiento
+      recognition.onresult = function(event) {
+        var transcript = event.results[0][0].transcript;
+        document.getElementById('result').textContent = transcript;
+      };
+
+      // Evento para manejar errores en el reconocimiento
+      recognition.onerror = function(event) {
+        alert('Error en el reconocimiento: ' + event.error);
+      };
+
+      // Evento para manejar el fin del reconocimiento
+      recognition.onend = function() {
+        alert('Fin del reconocimiento');
+      };
+
+      // Iniciar el reconocimiento de voz cuando se hace clic en el botón
+      document.getElementById('start-btn').addEventListener('click', function() {
+        recognition.start();
+      });
+    } else {
+      // El navegador no admite la API de reconocimiento de voz
+      alert('El navegador no admite la API de reconocimiento de voz');
+    }
+  </script>
+</body>
+</html>

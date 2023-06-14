@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+
+  <title>Infinite Scroll</title>
+  <style>
+    #content {
+      height: 500px;
+      overflow-y: scroll;
+    }
+    .item {
+      height: 200px;
+      background-color: lightgray;
+      margin: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <h2>Infinite Scrolling: Caso de prueba</h2>
+  </div>
+  <div id="content">
+    <div id="itemsContainer"></div>
+  </div>
+
+  <script>
+    // Datos de ejemplo
+    const itemsPerPage = 10;
+    const totalItems = 100;
+    let currentPage = 1;
+
+    // Función para obtener los elementos de la página actual
+    function getItems(page) {
+      const startIndex = (page - 1) * itemsPerPage;
+      const endIndex = page * itemsPerPage;
+      return Array.from({ length: totalItems }).slice(startIndex, endIndex);
+    }
+
+    // Función para renderizar los elementos en el DOM
+    function renderItems(items) {
+      const itemsContainer = document.getElementById("itemsContainer");
+      items.forEach((item, i) => {
+        const div = document.createElement("div");
+        div.className = "item";
+        const h2 = document.createElement("h3");
+        h2.className = "h2";
+        h2.innerText = "Contenedor de prueba numero " + i;
+        div.appendChild(h2);
+        itemsContainer.appendChild(div);
+      });
+    }
+
+    // Función para cargar más elementos cuando se alcance el final del scroll
+    function loadMoreItems() {
+      const content = document.getElementById("content");
+      if (content.scrollTop + content.clientHeight >= content.scrollHeight) {
+        currentPage++;
+        const items = getItems(currentPage);
+        renderItems(items);
+      }
+    }
+
+    // Evento de scroll para cargar más elementos cuando se alcance el final
+    document.getElementById("content").addEventListener("scroll", loadMoreItems);
+
+    // Carga inicial de elementos
+    const initialItems = getItems(currentPage);
+    renderItems(initialItems);
+  </script>
+</body>
+</html>
